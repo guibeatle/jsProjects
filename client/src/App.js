@@ -27,6 +27,7 @@ class App extends Component {
         {
           nome: "",
           geocodigo: null,
+          uf_geocodigo: null,
           uf_id: null
         }
       ],
@@ -37,6 +38,7 @@ class App extends Component {
       cidadeSelecionada: {
         nome: "",
         geocodigo: null,
+        uf_geocodigo: null,
         uf_id: null
       },
       newCityName: ""
@@ -59,12 +61,13 @@ class App extends Component {
         this.setState({ listaCidades });
       });
   };
-  getlistaCidadesPorEstado = estado => {
-    fetch(`/api/cidades/${estado}`)
+  getlistaCidadesPorEstado = nome => {
+    fetch(`/api/cidades/${nome}`)
       .then(res => res.json())
-      .then(listaCidades => {
-        console.log(listaCidades);
+      .then(res => {
+        var listaCidades = res.map(r => r);
         this.setState({ listaCidades });
+        console.log(listaCidades);
       });
   };
 
@@ -87,22 +90,23 @@ class App extends Component {
 
   handleChangeEstado = e => {
     console.log(e.target.value);
-    this.setState({ estadoSelecionado: e.target.value });
-    //console.log(this.estadoSelecionado);
-    //this.getlistaCidadesPorEstado(e.geocodigo);
-    console.log(this.estadoSelecionado.nome);
+    //this.setState({ estadoSelecionado: e.target.value });
+    this.getlistaCidadesPorEstado(e.target.value);
+    //console.log(this.estadoSelecionado.geocodigo);
   };
 
-  handleChangeCidade = cidadeSelecionada => {
-    this.listaCidades.setState(
-      this.getlistaCidadesPorEstado(this.estadoSelecionado)
-    );
-    this.cidadeSelecionada.setState({ cidadeSelecionada });
-    console.log(cidadeSelecionada.geocodigo);
+  handleChangeCidade = e => {
+    console.log(e.target.value);
+    //this.listaCidades.setState(
+    //this.getlistaCidadesPorEstado(this.estadoSelecionado)
+    //);
+    //this.cidadeSelecionada.setState({ e });
+    //console.log(cidadeSelecionada.geocodigo);
   };
 
   componentDidMount() {
     this.getlistaEstados();
+    //this.getlistaCidades();
   }
 
   render() {
@@ -141,7 +145,8 @@ class App extends Component {
           <Col>
             <h1 className="display-6">Cidades</h1>
             <FormGroup>
-              <Input type="select">
+              <Input type="select" onChange={this.handleChangeCidade}>
+                >
                 {this.state.listaCidades.length === 0 && (
                   <option>Nenhuma cidade adicionada.</option>
                 )}
@@ -149,7 +154,7 @@ class App extends Component {
                   <option>Selecione uma cidade</option>
                 )}
                 {this.state.listaCidades.map((cidades, i) => (
-                  <option key={i}>{cidades.nome}</option>
+                  <option key={i}>{cidades.nme_mun}</option>
                 ))}
               </Input>
             </FormGroup>

@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 app.use("/api/estados", require("./api/estados"));
 app.use("/api/cidades", require("./api/cidades"));
-app.use("/api/cidades/:geocodigoEstado?", require("./api/cidades"));
+app.use("/api/cidades/:nome", require("./api/cidades"));
 
 if (ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));

@@ -9,5 +9,12 @@ router.get("/", (req, res) => {
     return res.json(cidades);
   });
 });
+router.get("/:nome", (req, res) => {
+  var nome = req.params.nome;
 
+  Cidades.retornaTodasPorEstado(nome, (err, cidades) => {
+    if (err) return res.json(err);
+    return res.json(cidades);
+  });
+});
 module.exports = router;
